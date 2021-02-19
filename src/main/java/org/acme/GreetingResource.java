@@ -19,7 +19,7 @@ public class GreetingResource {
      * I never got this far. But believe you can solve this if you generate the config referenced in this comment, but
      * I don't know how to do that Quarkus? If we can sort this out then perhaps the issue is actually fixed!?!?!
      */
-    @Path("/fail")
+    @Path("/fail/jpg")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() throws IOException {
@@ -34,14 +34,29 @@ public class GreetingResource {
         return "Quarkus png logo width: " + bufferedImage.getWidth() + ". Rewritten jpeg width: " + bufferedImage2.getWidth();
     }
 
+
     /**
-     * This was failing in my tests previously. Will need to try again in my application.
+     * This is the reproducer I was originally working toward.
      */
-    @Path("/success")
+    @Path("/fail/tiff")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello2() throws IOException {
+        BufferedImage bufferedImage = ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("test.tiff"));
+        return "Tiff image width: " + bufferedImage.getWidth();
+    }
+
+
+    /**
+     * This works in native which was a surprise.
+     */
+    @Path("/success/png")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello3() throws IOException {
         BufferedImage bufferedImage = ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("quarkus-logo.png"));
         return "Quarkus png logo width: " + bufferedImage.getWidth();
     }
+
+
 }
