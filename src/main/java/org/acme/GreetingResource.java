@@ -47,6 +47,18 @@ public class GreetingResource {
     }
 
 
+    @Path("/fail/tiff2")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello4() throws IOException {
+        BufferedImage bufferedImage = ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("test.tiff"));
+        File newFile = new File("quarkus-logo.jpg");
+        ImageIO.write(bufferedImage, "jpg", newFile);
+        BufferedImage bufferedImage2 = ImageIO.read(newFile);
+        return "Tiff image width: " + bufferedImage2.getWidth();
+    }
+
+
     /**
      * This works in native which was a surprise.
      */
